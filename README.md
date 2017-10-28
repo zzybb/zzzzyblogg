@@ -6,5 +6,5 @@ cd /zzyproject 到这npm run dev
 -
 /zzy  到这nodemon app
 -
-务必开启3306d端口，导入vueadmin.sql文件。
+务必开启3306端口，导入vueadmin.sql文件。
 -
