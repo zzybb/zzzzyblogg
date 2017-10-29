@@ -2,8 +2,9 @@
 <div>
   <div class="loading" v-show="this.$store.state.loadingShow">
     <div class="spinner"></div>
+    <h1 style="color:white;">loading...</h1>
   </div>
-    <div  style="text-align:center;" v-show="mainShow">
+    <div  style="overflow:hidden;"   v-show="mainShow">
       <h1 class="About" v-on:click="enter">进入博客</h1>
       <h1 class="hello">Hello</h1>
     </div>
@@ -68,6 +69,9 @@
         }
       }
     },
+    beforCreate() {
+      this.$store.commit('Loading');
+    },
     created() {
       this.routePath();
     },
@@ -76,8 +80,9 @@
         this.routePath();
       }
     },
-    
-
+    mounted() {
+        //this.$store.commit('Loading');
+    },
     methods: {
       routePath() {
         if (this.$route.path !== "/") {
@@ -186,7 +191,7 @@
 body{
     width:100%;
     height:100%;
-    background-image:url(../static/images/background.jpg);
+    background-image:url(http://oy2mxvmv9.bkt.clouddn.com/background.jpg);
     background-attachment:fixed;
     background-repeat:no-repeat;
     font-size:16px;
@@ -209,17 +214,13 @@ h1.enterBlog{
   color:white;
 }
 h1.hello{
-  margin-top:20%;
-  display:block;
+  transform:translateX(-50%);
+  left:45%;
+  top:50%;
+  transform:translateY(-50%);
   color:white;
   font-size:5em;
-}
-h1.myname{
-  display:block;
-  //position:absolute;
-  //left:42%;
-  top:45%;
-  color:white;
+  position:absolute;
 }
 h1.About{
   color:white;
@@ -236,14 +237,20 @@ h1.About{
   height:100%;
   background-color:rgba(0, 0, 0,0.8);
   z-index:20;
+  text-align:center;
+}
+.loading h1{
+  position:relative;
+    top:55%;
 }
 .spinner {
-  position:absolute;
+  position:relative;
   width: 60px;
   height: 60px;
   background-color: darkslateblue;
   top:50%;
-  left:50%;
+  //left:50%;
+  margin:0 auto;
   -webkit-animation: rotateplane 1.2s infinite ease-in-out;
   animation: rotateplane 1.2s infinite ease-in-out;
 }

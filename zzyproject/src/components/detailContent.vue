@@ -190,7 +190,6 @@
         var url = '/content/' + this.$route.path.slice(9, 10) + '/' + this.$route.path.slice(11, 12);
         var comments = url + '/' + "comments";
         this.$http.post("/Login", {
-          commentsId: this.commentLen + 1,
           user: user,
           mail: mail,
           web: web,

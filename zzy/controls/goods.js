@@ -8,10 +8,10 @@ let session = require('express-session');
 
 let pool = mysql.createPool(db);
 
-//捕获错误,插入相同ID时错误抛出程序不崩溃
-process.on('uncaughtException', function (err) {
+//捕获错误.
+/*process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
-});
+});*/
 
 
 module.exports = {
@@ -101,11 +101,11 @@ module.exports = {
             req.session.usermail = mail;
             queryUser = 'INSERT INTO user(name,mail,website) VALUES(?,?,?)';
             conn.query('SELECT * FROM ?? WHERE name=?', ['user', userId], (err, rows1) => {
-                if (err) {
-                    console.log(rows1.name + "is exsit");
+                if (rows1[0] !== undefined) {
+                    console.log(rows1[0].name + "is exsit");
                     conn.release();
                 } else {
-                    conn.query(queryUser, [userId, mail, website], (err, rows2) => {
+                    conn.query(queryUser, [userId, mail, website], (err, rows) => {
                         if (err) throw err;
                         console.log("User Updata OK");
                         conn.release();
@@ -130,9 +130,9 @@ module.exports = {
             req.session.usermail = mail;
             creatTime = moment().format('YYYY-MM-DD HH:mm:ss');
             
-            queryCom = 'INSERT INTO comment(art_id,comments,creat_time,username,usermail,parent_Id,Tousername,commentsId) VALUES(?,?,?,?,?,?,?,?)';
+            queryCom = 'INSERT INTO comment(art_id,comments,creat_time,username,usermail,parent_Id,Tousername) VALUES(?,?,?,?,?,?,?)';
             
-            conn.query(queryCom, [artId, comments, creatTime, userId, mail, parent_Id, Tousername, commentsId], (err, rows) => {
+            conn.query(queryCom, [artId, comments, creatTime, userId, mail, parent_Id, Tousername], (err, rows) => {
                 console.log(req.session);
                 console.log("Comments Updata OK");
             });
@@ -158,11 +158,19 @@ module.exports = {
             conn.query(queryCom, [comments, creatTime, userId, mail, artId], (err, rows) => {
                 console.log("lyb Updata OK");
             });
-            conn.query(queryUser, [userId, mail, website], (err, rows) => {
-                if (err) throw err;
-                res.send({ username: req.session.username, usermail: req.session.usermail, Userdata: rows });
-                console.log("User Updata OK");
-                conn.release();
+            conn.query('SELECT * FROM ?? WHERE name=?', ['user', userId], (err, rows1) => {
+                if (rows1[0] !== undefined) {
+                    console.log(rows1[0].name + "is exsit");
+                    res.send(200);
+                    conn.release();
+                } else {
+                    conn.query(queryUser, [userId, mail, website], (err, rows2) => {
+                        if (err) throw err;
+                        console.log("User Updata OK");
+                        res.send(200);
+                        conn.release();
+                    });
+                }
             });
         })
     },
